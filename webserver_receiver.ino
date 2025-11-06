@@ -24,8 +24,8 @@ contador boardsStruct[3] = {ponto1, ponto2};
 AsyncWebServer server(80);
 AsyncEventSource events("/events");
 
-const char* ssid = "ValenteTakeda";
-const char* password = "ackmakVT96!";
+const char* ssid = "nome_do_wifi";
+const char* password = "senha_do_wifi";
 
 // callback function that will be executed when data is received
 void OnDataRecv(const uint8_t * mac_addr, const uint8_t *incomingData, int len) {
