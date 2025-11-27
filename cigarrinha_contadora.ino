@@ -1,10 +1,15 @@
 
 #include <esp_now.h>
 #include <WiFi.h>
+#include "driver/rtc_io.h"
+
+#define BUTTON_PIN_BITMASK(GPIO) (1ULL << GPIO)  // 2 ^ GPIO_NUMBER in hex
+#define USE_EXT0_WAKEUP          1                     // 1 = EXT0 wakeup, 0 = EXT1 wakeup
+#define WAKEUP_GPIO              GPIO_NUM_35
 
 // REPLACE WITH THE RECEIVER'S MAC Address
 uint8_t broadcastAddress[] = {
-0x94, 0xb5, 0x55, 0x26, 0x76, 0xcc
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 // Must match the receiver structure
 typedef struct contador {
@@ -23,13 +28,13 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
 
-const byte pinoFototransistor = 35; //PINO ANALÓGICO UTILIZADO PELO FOTOTRANSISTOR
+const byte pinFttrans = 35; //pino do fototransistor
                
 void setup(){
-  Serial.begin(115200); //INICIALIZAÇÃO DA SERIAL
-  pinMode(pinoFototransistor, INPUT); //DEFINE O PINO COMO ENTRADA
-  // Set device as a Wi-Fi Station
-  WiFi.mode(WIFI_STA);
+  Serial.begin(115200); //inicializa o serial
+  pinMode(pinFttrans, INPUT); //pino de entrada
+  
+  WiFi.mode(WIFI_STA);// põe o esp como station
 
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
@@ -46,26 +51,26 @@ void setup(){
     Serial.println("Failed to add peer");
     return;
   }
+  esp_sleep_enable_ext0_wakeup(WAKEUP_GPIO, 0);  //põe o esp em deep sleep e acorda qnd o pino 35 ler low
+  rtc_gpio_pullup_dis(WAKEUP_GPIO);
+  rtc_gpio_pulldown_en(WAKEUP_GPIO);
+  myData.id = 1;
+  myData.stt_carrinho = true;
+  // Send message via ESP-NOW
+  esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
+  
+  if (result == ESP_OK) {
+    Serial.println("Sent with success");
+  }
+  else {
+    Serial.println("Error sending the data");
+  }
 }
  
 void loop(){
-  if(analogRead(pinoFototransistor) < 2500){ //SE A LEITURA DO FOTOTRANSISTOR FOR MENOS QUE 1020 BITS
-    Serial.print(analogRead(pinoFototransistor)); // IMPRIME O VALOR LIDO
-    Serial.println(" Recebendo sinal infravermelho"); //IMPRIME O TEXTO NA SERIAL
-    myData.id= 1;
-    myData.stt_carrinho = true;
-    // Send message via ESP-NOW
-    esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
-    
-    if (result == ESP_OK) {
-      Serial.println("Sent with success");
-    }
-    else {
-      Serial.println("Error sending the data");
-    }
-  }else{ 
-    Serial.print(analogRead(pinoFototransistor)); // IMPRIME O VALOR LIDO
-    Serial.println(" Sinal infravermelho interrompido"); //IMPRIME O TEXTO NA SERIAL
-  }
-  delay(100);
+  Serial.print(analogRead(pinFttrans)); // escreve a leitura do pino 35
+  Serial.println(" Recebendo sinal infravermelho"); //escreve a frase
+  
+  Serial.println("Going to sleep now");//escreve a frase
+  esp_deep_sleep_start();
 }
