@@ -1,32 +1,58 @@
-<!DOCTYPE html>
+/**
+ * @file builtinfiles.h
+ * @brief This file is part of the WebServer example for the ESP8266WebServer.
+ *
+ * This file contains long, multiline text variables for  all builtin resources.
+ */
+
+// used for $upload.htm
+static const char uploadContent[] PROGMEM =
+  R"==(<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoLocalizador</title>
+    <title>GeoLocalizador | UNIFOR</title>
+
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+         :root {
+            --primary: #ffffff;
+            --accent-blue: #3498db;
+            --card-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.25);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Segoe UI", sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: white;
             min-height: 100vh;
+            color: var(--primary);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
         }
         
         @keyframes gradientBG {
-            0% {background-position: 0% 50%;}
-            50% {background-position: 100% 50%;}
-            100% {background-position: 0% 50%;}
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
         
         .container {
@@ -37,104 +63,100 @@
         
         header {
             text-align: center;
-            padding: 20px 0;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
         
         header h1 {
-            font-size: 2.5rem;
+            font-size: 2.7rem;
+            font-weight: 700;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
         }
         
         header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+            font-size: 1.15rem;
+            opacity: .9;
         }
         
         .nav-tabs {
             display: flex;
             justify-content: center;
-            margin-bottom: 25px;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
+            margin-bottom: 30px;
         }
         
         .tab {
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 12px 26px;
             font-weight: 600;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.18);
+            transition: .3s ease;
             border: 2px solid transparent;
+            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
         .tab:hover {
-            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.3);
         }
         
         .tab.active {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--primary);
             color: #2c3e50;
-            border-color: white;
+            border-color: #ffffff;
         }
         
         .content {
             display: none;
-            animation: fadeIn 0.5s ease forwards;
-        }
-        
-        @keyframes fadeIn {
-            from {opacity: 0;transform: translateY(20px);}
-            to {opacity: 1;transform: translateY(0);}
+            animation: fadeIn .4s ease forwards;
         }
         
         .content.active {
             display: block;
         }
         
-        .card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
-        .card-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
         }
         
         #map-container {
             height: 450px;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .3);
         }
         
         #map {
-            height: 100%;
             width: 100%;
+            height: 100%;
         }
         
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
             gap: 20px;
-            margin-bottom: 25px;
         }
         
         .info-card {
@@ -142,83 +164,50 @@
             border-radius: 12px;
             padding: 20px;
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: .3s ease;
         }
         
         .info-card:hover {
             transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.18);
         }
         
         .info-card i {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            color: #3498db;
-        }
-        
-        .info-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-        
-        .info-card p {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        
-        .btn {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn:hover {
-            background: #2980b9;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            font-size: 2.4rem;
+            margin-bottom: 12px;
+            color: var(--accent-blue);
         }
         
         footer {
             text-align: center;
             margin-top: 40px;
-            padding: 20px;
-            font-size: 0.9rem;
-            opacity: 0.8;
+            opacity: 0.75;
+            font-size: .9rem;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
+
+
         <header>
-            <h1><i class="fas fa-globe-americas"></i> GeoLocalizador</h1>
-            <p>Mapa interativo do campus da UNIFOR</p>
+            <h1><i class="fas fa-globe-americas"></i> GeoLocalizador UNIFOR</h1>
+            <p>Sistema interativo para visualização do campus da Universidade de Fortaleza</p>
         </header>
 
-        <div class="nav-tabs">
-            <div class="tab active" data-target="map-tab">
-                <i class="fas fa-map-marked-alt"></i> Mapa
-            </div>
-            <div class="tab" data-target="about-tab">
-                <i class="fas fa-code"></i> Sobre o Projeto
-            </div>
-            <div class="tab" data-target="info-tab">
-                <i class="fas fa-info-circle"></i> Informações
-            </div>
-        </div>
 
-        <div id="map-tab" class="content active">
+        <nav class="nav-tabs">
+            <div class="tab active" data-target="map-tab"><i class="fas fa-map"></i> Mapa</div>
+            <div class="tab" data-target="about-tab"><i class="fas fa-laptop-code"></i> Sobre</div>
+            <div class="tab" data-target="info-tab"><i class="fas fa-info-circle"></i> Informações</div>
+        </nav>
+
+
+        <section id="map-tab" class="content active">
             <div class="card">
-                <h2 class="card-title"><i class="fas fa-map"></i> Mapa Interativo</h2>
-                <p>Mapa do campus</p>
+                <h2 class="card-title"><i class="fas fa-map-marked-alt"></i> Mapa Interativo</h2>
+                <p>Localização principal do campus da UNIFOR.</p>
 
                 <div id="map-container">
                     <div id="map"></div>
@@ -232,67 +221,75 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div id="about-tab" class="content">
+
+        <section id="about-tab" class="content">
             <div class="card">
                 <h2 class="card-title"><i class="fas fa-code"></i> Sobre o Projeto</h2>
-                <p>Ainda tenho que adicionar</p>
+                <p>Este projeto foi desenvolvido como parte da Atividade de Extensão da Universidade de Fortaleza (UNIFOR).</p>
             </div>
-        </div>
+        </section>
 
-        <div id="info-tab" class="content">
+
+        <section id="info-tab" class="content">
             <div class="card">
                 <h2 class="card-title"><i class="fas fa-info-circle"></i> Informações</h2>
-                <p>(Espaço reservado para informações adicionais)</p>
+                <p>Espaço reservado para dados adicionais, pontos de referência do campus, rotas internas ou outras funcionalidades futuras.</p>
             </div>
-        </div>
+        </section>
     </div>
+
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Coordenadas fixas da UNIFOR
-        const uniforLat = -3.770086;
-        const uniforLng = -38.479367;
+        const uniforCoords = [-3.770086, -38.479367];
 
-        // Inicializar mapa fixo no campus UNIFOR (houve alteração)
-        const map = L.map('map').setView([uniforLat, uniforLng], 18);
+        const map = L.map('map', {
+            zoomControl: true,
+            scrollWheelZoom: true
+        }).setView(uniforCoords, 18);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors',
+            attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        L.marker([uniforLat, uniforLng])
+        L.marker(uniforCoords)
             .addTo(map)
-            .bindPopup("Campus da UNIFOR")
+            .bindPopup("<strong>Campus da UNIFOR</strong><br>Fortaleza - CE")
             .openPopup();
 
-        // Atualizar horário (sob alteração ainda)
         function updateLocalTime() {
             const now = new Date();
-            document.getElementById('local-time').textContent = now.toLocaleTimeString('pt-BR');
+            document.querySelector('#local-time').textContent = now.toLocaleTimeString('pt-BR');
         }
-        updateLocalTime();
         setInterval(updateLocalTime, 1000);
+        updateLocalTime();
 
-        // Controle das abas
-        function setupTabs() {
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach((tab) => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach((t) => t.classList.remove('active'));
-                    tab.classList.add('active');
 
-                    document.querySelectorAll('.content').forEach((content) => {
-                        content.classList.remove('active');
-                    });
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
 
-                    const target = tab.getAttribute('data-target');
-                    document.getElementById(target).classList.add('active');
-                });
+                document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+                document.getElementById(tab.dataset.target).classList.add('active');
             });
-        }
-        setupTabs();
+        });
     </script>
 </body>
+
 </html>
+)==";
+
+// used for $upload.htm
+static const char notFoundContent[] PROGMEM = R"==(
+<html>
+<head>
+  <title>Resource not found</title>
+</head>
+<body>
+  <p>The resource was not found.</p>
+  <p><a href="/">Start again</a></p>
+</body>
+)==";
